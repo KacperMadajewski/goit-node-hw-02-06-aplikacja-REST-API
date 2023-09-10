@@ -1,5 +1,6 @@
 const User = require("../models/users.model");
 const jwt = require("jsonwebtoken");
+const usersServices = require("../services/users.service");
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -19,7 +20,9 @@ const signup = async (req, res, next) => {
     return res.status(201).json({
       status: "success",
       code: "201",
-      data: { user: newUser },
+      data: {
+        message: "Registration successful",
+      },
     });
   } catch (err) {
     next(err);
@@ -55,7 +58,37 @@ const signin = async (req, res) => {
   });
 };
 
+const signout = async (req, res, next) => {
+  try {
+    await usersServices.logout(req.user);
+    res.json({
+      status: "success",
+      code: 200,
+      message: "User signed out",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const currentUser = async (req, res, next) => {
+  try {
+    const current = req.user;
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        current,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   signup,
   signin,
+  signout,
+  currentUser,
 };

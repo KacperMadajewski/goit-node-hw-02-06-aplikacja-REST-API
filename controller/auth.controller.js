@@ -73,12 +73,12 @@ const signout = async (req, res, next) => {
 
 const currentUser = async (req, res, next) => {
   try {
-    const current = req.user;
-    res.status(200).json({
-      status: "success",
+    res.json({
+      status: "Success",
       code: 200,
       data: {
-        current,
+        email: req.user.email,
+        subscription: req.user.subscription,
       },
     });
   } catch (err) {

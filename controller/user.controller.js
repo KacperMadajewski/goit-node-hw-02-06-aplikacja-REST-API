@@ -2,7 +2,7 @@ const User = require("../models/users.model");
 const jwt = require("jsonwebtoken");
 const usersServices = require("../services/users.service");
 const gravatar = require("gravatar");
-const nanoid = require("nanoid");
+const { v4: uuidv4 } = require("uuid");
 const sendEmail = require("../services/email.service");
 
 const signup = async (req, res, next) => {
@@ -23,7 +23,7 @@ const signup = async (req, res, next) => {
       d: "404",
     });
 
-    const verificationToken = nanoid();
+    const verificationToken = uuidv4();
 
     const newUser = new User({ email, avatarURL, verificationToken });
     newUser.setPassword(password);

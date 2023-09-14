@@ -2,6 +2,8 @@ const User = require("../models/users.model");
 const jwt = require("jsonwebtoken");
 const usersServices = require("../services/users.service");
 const gravatar = require("gravatar");
+const nanoid = require("nanoid");
+const sendEmail = require("../services/email.service");
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -21,15 +23,26 @@ const signup = async (req, res, next) => {
       d: "404",
     });
 
-    const newUser = new User({ email, avatarURL });
+    const verificationToken = nanoid();
+
+    const newUser = new User({ email, avatarURL, verificationToken });
     newUser.setPassword(password);
     await newUser.save();
+    const verificationLink = `${req.protocol}://${req.get(
+      "host"
+    )}/api/users/verify/${verificationToken}`;
+    sendEmail({
+      to: newUser.email,
+      link: verificationLink,
+    });
+
     return res.status(201).json({
       status: "success",
       code: "201",
       data: {
         message: "Registration successful",
         avatarURL,
+        verificationToken,
       },
     });
   } catch (err) {

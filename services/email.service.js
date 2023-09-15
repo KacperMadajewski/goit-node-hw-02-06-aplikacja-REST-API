@@ -3,12 +3,12 @@ require("dotenv").config();
 
 const config = {
   pool: true,
-  host: process.env.MAIL_HOST,
-  port: process.env.MAIL_PORT,
+  host: "smtp-relay.brevo.com",
+  port: 587,
   secure: false,
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
+    user: "kac.madajewski@gmail.com",
+    pass: "pFKqfYs8BQHOAtzm",
   },
 };
 const sendEmail = async ({ to, link }) => {

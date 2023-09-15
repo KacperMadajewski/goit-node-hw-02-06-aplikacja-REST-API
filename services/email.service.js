@@ -7,8 +7,8 @@ const config = {
   port: 587,
   secure: false,
   auth: {
-    user: "kac.madajewski@gmail.com",
-    pass: "pFKqfYs8BQHOAtzm",
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
   },
 };
 const sendEmail = async ({ to, link }) => {

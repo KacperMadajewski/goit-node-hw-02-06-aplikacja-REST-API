@@ -3,14 +3,7 @@ const sendEmail = require("../services/email.service");
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
-  if (!verificationToken) {
-    return res.status(400).json({
-      status: "Bad Request",
-      code: 400,
-      message: "Verification token is required :(",
-    });
-  }
-
+  
   const user = await User.findOne({ verificationToken });
   if (!user) {
     return res.json({
@@ -19,7 +12,7 @@ const verifyEmail = async (req, res) => {
       message: "User not found",
     });
   }
-  // user.verificationToken = null;
+  user.verificationToken = null;
   user.verify = true;
   await user.save();
   return res.json({
